@@ -3,6 +3,7 @@
 #include <vector>
 #include <filesystem>
 #include <fstream>
+#include <chrono>
 
 namespace fs = std::filesystem; //aliasing
 class utils {
@@ -145,6 +146,10 @@ public:
             else
             makedir(input[1]);
         }
+        else if(input[0] == "touch"){
+            touchFile(input[1]);
+            //tried updating time stamp was not possible unless we use external libraries
+        }
         else if (input[0] == "man") {
         if (input.size() > 1) {
             for (size_t i = 1; i < input.size(); i++) {
@@ -156,6 +161,16 @@ public:
      else {
         std::cout << "Unknown command: " << input[0] << std::endl;
     }
+    }
+    void touchFile(const std::string& filename) {
+    auto current_time = std::chrono::system_clock::now();
+  
+    fs::path path{ "." };
+    path /= filename; 
+    fs::create_directories(path.parent_path()); 
+    std::ofstream ofs(path);
+    ofs << "File created by touch command that you have put\n"; 
+    ofs.close();
     }
     //From here we start defining all the functions required to execute the commands.
 
