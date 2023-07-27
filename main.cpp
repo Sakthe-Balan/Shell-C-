@@ -375,7 +375,7 @@ void renameFile(const std::string& source, const std::string& destination) {
                 executeCppFile(path);
             } else if (fileExtension == "py") {
                 executePythonFile(path);}
-            else if (fileExtension == ".c") {
+            else if (fileExtension == "c") {
                 executeCFile(path);
             } else {
                 std::cout << "Unsupported file type. Cannot execute." << std::endl;
