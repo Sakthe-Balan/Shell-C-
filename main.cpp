@@ -19,14 +19,20 @@ public:
         std::cout << "  exit : Exit the shell.\n";
         std::cout << "  ls   : List files and directories in the current directory.\n";
     }
-
+    void manualCommand(){
+        std::string commands = "ls: List files and directories in the current working directory.\npwd: Print the current working directory (the path of the directory you are currently in).\ncd: Change the current working directory to the specified directory.\ncp: Copy files or directories from one location to another.\nrm: Remove (delete) files or directories.\nman: Display the manual pages (documentation) for a specific command.\nmv: Move or rename files or directories.\nmkdir: Create a new directory.\ntouch: Create an empty file or update the access/modified timestamps of an existing file.\nchmod: Change the permissions of files or directories.\nexit: Exit the current shell or terminal session.\nsudo: Execute a command with superuser (administrative) privileges.\necho: Print the given arguments to the standard output.\ncat: Concatenate and display the contents of files.\n>>: Redirect and append output to a file.\n<<: Redirect input from a here document or a string.\nhistory: Display a list of recently executed commands.\ngrep: Search for a pattern in files or output.\nwget: Download files from the internet using the HTTP, HTTPS, or FTP protocols.\ncurl: Transfer data from or to a server using various protocols (URLs).\nunzip: Extract files from a ZIP archive.";
+        std::cout<<"Command Manual :"<<commands;
+        return;
+    }
     
     // All the functions for the commands are written as a else if condition in the execute function
     void execute(std::vector<std::string> input) {
         if (input.empty()) {
             return;
         }
-
+        if(input[0]=="man"){
+            manualCommand();
+        }
         if (input[0] == "help") {
             help();
         } else if (input[0] == "ls") {
