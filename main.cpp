@@ -114,7 +114,7 @@ void rm(const std::vector<std::string>& input) {
         std::string file_path;
         for (size_t i = 1; i < input.size(); i++) { // to check -f flag
             std::string word = input[i];
-            if (word == "-r") {
+            if (word == "-f") {
                 forceRemove = true;
             } else {
                 file_path = word;
@@ -122,7 +122,7 @@ void rm(const std::vector<std::string>& input) {
         }
 
         if (file_path.empty()) {
-            std::cout << "Usage: rm [-r] <file_path>\n";
+            std::cout << "Usage: rm [-f] <file_path>\n";
             return;
         }
 
@@ -267,7 +267,13 @@ void cd(const std::string& directory) {
          else {
             show_all_commands();
         }}
-          
+          else if (input[0] == "exec") {
+            if (input.size() < 2) {
+                std::cout << "Usage: exec <path_to_file>\n";
+                return;
+            }
+            else exec(input[1]);
+        } 
           
      else {
         std::cout << "Unknown command: " << input[0] << std::endl;
@@ -348,6 +354,46 @@ void renameFile(const std::string& source, const std::string& destination) {
         return "";
     }
 }
+  void exec(const std::string& path) {
+        if (fs::exists(path)) {
+            std::string fileExtension = path.substr(path.find_last_of(".") + 1);
+            if (fileExtension == "cpp") {
+                executeCppFile(path);
+            } else if (fileExtension == "py") {
+                executePythonFile(path);
+            } else {
+                std::cout << "Unsupported file type. Cannot execute." << std::endl;
+            }
+        } else {
+            std::cout << "File not found: " << path << std::endl;
+        }
+    }
+void executeCppFile(const std::string& cppFilePath) {
+        std::filesystem::path cppPath(cppFilePath);
+        std::string executablePath = cppPath.stem().string(); // Get the filename stem (without extension)
+        std::string compileCommand = "g++ -o " + executablePath + " " + cppFilePath;
+
+        int compileResult = std::system(compileCommand.c_str());
+
+        if (compileResult == 0) {
+            std::string runCommand = "./" + executablePath;
+            std::system(runCommand.c_str());
+        } else {
+            std::cout << "Compilation failed." << std::endl;
+        }
+    }
+
+     void executePythonFile(const std::string& pyFilePath) {
+        std::string command = "python " + pyFilePath;
+        int executionResult = std::system(command.c_str());
+
+        if (executionResult != 0) {
+            std::cout << "Execution failed." << std::endl;
+        }
+    }
+
+
+
 
 };
 
