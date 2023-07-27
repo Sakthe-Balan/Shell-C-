@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <fstream>
 #include <chrono>
+#include <cstdlib>
 
 namespace fs = std::filesystem; //aliasing
 class utils {
@@ -108,7 +109,7 @@ public:
         return ;
     }
     }
-void removeFile(const std::vector<std::string>& input) {
+void rm(const std::vector<std::string>& input) {
         bool forceRemove = false;
         std::string file_path;
         for (size_t i = 1; i < input.size(); i++) { // to check -f flag
@@ -136,6 +137,33 @@ void removeFile(const std::vector<std::string>& input) {
             std::cerr << "Error removing file/directory: " << ex.what() << std::endl;
         }
     }
+void cd(const std::string& directory) {
+    try {
+        if(directory.empty()){
+            char* home_directory = std::getenv("HOME");
+            if (home_directory != nullptr) {
+                fs::current_path(home_directory);
+                std::cout << "Current working directory changed to: " << home_directory << std::endl;
+            } else {
+                std::cerr << "Error: HOME environment variable not set." << std::endl;
+            }
+
+        }
+        else
+        {
+        // to get the current working directory 
+        fs::path current_path = fs::current_path();
+        // adds the direc to the current path
+        fs::path new_path = current_path / directory;
+        // sets new path
+        fs::current_path(new_path);
+        std::cout << "Current working directory changed to: " << new_path << std::endl;
+        } 
+        }
+    catch (const std::exception& e) {
+        std::cerr << "Error changing the current directory: " << e.what() << std::endl;
+    }
+}
     void makedirwithpermissions(std::string path,int permissions){
          try {
         fs::create_directory(path);
@@ -210,8 +238,16 @@ void removeFile(const std::vector<std::string>& input) {
     }        }
           
       else if (input[0] == "rm") {
-            removeFile(input);
+            rm(input);
         }
+          else if (input[0] == "cd") {
+        if (input.size() > 1) {
+            cd(input[1]);
+        } else {
+            // If the user types 'cd' without arguments, go to the home directory
+            cd("");
+        }
+    }
         else if(input[0] == "touch"){
             touchFile(input[1]);
             //tried updating time stamp was not possible unless we use external libraries
