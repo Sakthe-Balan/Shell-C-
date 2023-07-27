@@ -19,20 +19,86 @@ public:
         std::cout << "  exit : Exit the shell.\n";
         std::cout << "  ls   : List files and directories in the current directory.\n";
     }
-    void manualCommand(){
-        std::string commands = "ls: List files and directories in the current working directory.\npwd: Print the current working directory (the path of the directory you are currently in).\ncd: Change the current working directory to the specified directory.\ncp: Copy files or directories from one location to another.\nrm: Remove (delete) files or directories.\nman: Display the manual pages (documentation) for a specific command.\nmv: Move or rename files or directories.\nmkdir: Create a new directory.\ntouch: Create an empty file or update the access/modified timestamps of an existing file.\nchmod: Change the permissions of files or directories.\nexit: Exit the current shell or terminal session.\nsudo: Execute a command with superuser (administrative) privileges.\necho: Print the given arguments to the standard output.\ncat: Concatenate and display the contents of files.\n>>: Redirect and append output to a file.\n<<: Redirect input from a here document or a string.\nhistory: Display a list of recently executed commands.\ngrep: Search for a pattern in files or output.\nwget: Download files from the internet using the HTTP, HTTPS, or FTP protocols.\ncurl: Transfer data from or to a server using various protocols (URLs).\nunzip: Extract files from a ZIP archive.";
-        std::cout<<"Command Manual :"<<commands;
-        return;
+    void show_all_commands(){
+        std::string commands[21] = {
+        "ls: List files and directories in the current working directory.",
+        "pwd: Print the current working directory (the path of the directory you are currently in).",
+        "cd: Change the current working directory to the specified directory.",
+        "cp: Copy files or directories from one location to another.",
+        "rm: Remove (delete) files or directories.",
+        "man: Display the manual pages (documentation) for a specific command.",
+        "mv: Move or rename files or directories.",
+        "mkdir: Create a new directory.",
+        "touch: Create an empty file or update the access/modified timestamps of an existing file.",
+        "chmod: Change the permissions of files or directories.",
+        "exit: Exit the current shell or terminal session.",
+        "sudo: Execute a command with superuser (administrative) privileges.",
+        "echo: Print the given arguments to the standard output.",
+        "cat: Concatenate and display the contents of files.",
+        ">>: Redirect and append output to a file.",
+        "<<: Redirect input from a here document or a string.",
+        "history: Display a list of recently executed commands.",
+        "grep: Search for a pattern in files or output.",
+        "wget: Download files from the internet using the HTTP, HTTPS, or FTP protocols.",
+        "curl: Transfer data from or to a server using various protocols (URLs).",
+        "unzip: Extract files from a ZIP archive."
+    };
+    std::cout << "Command Manual:\n";
+        for (const std::string& command : commands) {
+            std::cout << command << std::endl;
+        }
     }
+    void manualCommand(const std::string flags) {
+    std::string commands[21] = {
+        "ls: List files and directories in the current working directory.",
+        "pwd: Print the current working directory (the path of the directory you are currently in).",
+        "cd: Change the current working directory to the specified directory.",
+        "cp: Copy files or directories from one location to another.",
+        "rm: Remove (delete) files or directories.",
+        "man: Display the manual pages (documentation) for a specific command.",
+        "mv: Move or rename files or directories.",
+        "mkdir: Create a new directory.",
+        "touch: Create an empty file or update the access/modified timestamps of an existing file.",
+        "chmod: Change the permissions of files or directories.",
+        "exit: Exit the current shell or terminal session.",
+        "sudo: Execute a command with superuser (administrative) privileges.",
+        "echo: Print the given arguments to the standard output.",
+        "cat: Concatenate and display the contents of files.",
+        ">>: Redirect and append output to a file.",
+        "<<: Redirect input from a here document or a string.",
+        "history: Display a list of recently executed commands.",
+        "grep: Search for a pattern in files or output.",
+        "wget: Download files from the internet using the HTTP, HTTPS, or FTP protocols.",
+        "curl: Transfer data from or to a server using various protocols (URLs).",
+        "unzip: Extract files from a ZIP archive."
+    };
+
+    if (flags == "" || flags==" ") {
+        std::cout << "Command Manual:\n";
+        for (const std::string& command : commands) {
+            std::cout << command << std::endl;
+        }
+    } else {
+        bool found = false;
+        for (const std::string& command : commands) {
+            if (command.find(flags + ":") == 0) {
+                std::cout << "Command Manual for " << flags << ":\n" << command << std::endl;
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            std::cout << "Command not found in the manual." << std::endl;
+        }
+    }
+}
     
     // All the functions for the commands are written as a else if condition in the execute function
     void execute(std::vector<std::string> input) {
         if (input.empty()) {
             return;
         }
-        if(input[0]=="man"){
-            manualCommand();
-        }
+       
         if (input[0] == "help") {
             help();
         } else if (input[0] == "ls") {
@@ -53,9 +119,17 @@ public:
             }
             else run(input[1]);
         } 
-        else {
-            std::cout << "Unknown command: " << input[0] << std::endl;
-        }
+        else if (input[0] == "man") {
+        if (input.size() > 1) {
+            for (size_t i = 1; i < input.size(); i++) {
+                std::string word = input[i];
+                manualCommand(word);}}
+         else {
+            show_all_commands();
+        }}
+     else {
+        std::cout << "Unknown command: " << input[0] << std::endl;
+    }
     }
     //From here we start defining all the functions required to execute the commands.
 
