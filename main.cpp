@@ -174,6 +174,14 @@ void cd(const std::string& directory) {
         return ;
     }
     }
+    void opennotepad(std::string filename){
+    std::string notepadparameter;notepadparameter = "notepad \""+filename + "\"";
+    system(notepadparameter.c_str()); 
+    return;
+    }
+void clearfunc(){
+    std::cout << "\033[2J\033[1;1H";
+    }
     //copy and delete contents from source to destination file and delete the file as well
     void copyfunction(const std::string& source, const std::string& destination) {
   
@@ -251,6 +259,12 @@ void cd(const std::string& directory) {
         else if(input[0] == "touch"){
             touchFile(input[1]);
             //tried updating time stamp was not possible unless we use external libraries
+        }
+         else if(input[0] == "clear"){
+            clearfunc();
+        }
+        else if(input[0] == "nano"){
+            opennotepad(input[1]);
         }
         else if(input[0] == "rename"){
             renameFile(input[1],input[2]);
