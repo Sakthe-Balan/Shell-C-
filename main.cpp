@@ -112,6 +112,27 @@ public:
         return ;
     }
     }
+    //copy and delete contents from source to destination file and delete the file as well
+    void copyfunc(const std::string& source, const std::string& destination) {
+  
+        std::ifstream sourceFile(source, std::ios::binary);
+        std::ofstream destinationFile(destination, std::ios::binary);
+
+        // Check if both files are open before proceeding
+        if (sourceFile.is_open() && destinationFile.is_open()) {
+            // Copy the contents from source to destination
+            destinationFile << sourceFile.rdbuf();
+
+            // Close the files after copying
+            sourceFile.close();
+            destinationFile.close();
+
+            std::cout << "File copied successfully to your dest file." << std::endl;
+        } else {
+            std::cerr << "Error: Could not open files." << std::endl;
+      }
+    
+}
     // All the functions for the commands are written as a else if condition in the execute function
     void execute(std::vector<std::string> input) {
         if (input.empty()) {
@@ -145,6 +166,9 @@ public:
             }
             else
             makedir(input[1]);
+        }
+        else if(input[0]=="cp"){
+            copyfunc(input[1],input[2]);
         }
         else if(input[0] == "touch"){
             touchFile(input[1]);
