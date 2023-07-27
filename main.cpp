@@ -374,7 +374,9 @@ void renameFile(const std::string& source, const std::string& destination) {
             if (fileExtension == "cpp") {
                 executeCppFile(path);
             } else if (fileExtension == "py") {
-                executePythonFile(path);
+                executePythonFile(path);}
+            else if (fileExtension == ".c") {
+                executeCFile(path);
             } else {
                 std::cout << "Unsupported file type. Cannot execute." << std::endl;
             }
@@ -386,6 +388,20 @@ void executeCppFile(const std::string& cppFilePath) {
         std::filesystem::path cppPath(cppFilePath);
         std::string executablePath = cppPath.stem().string(); // Get the filename stem (without extension)
         std::string compileCommand = "g++ -o " + executablePath + " " + cppFilePath;
+
+        int compileResult = std::system(compileCommand.c_str());
+
+        if (compileResult == 0) {
+            std::string runCommand = "./" + executablePath;
+            std::system(runCommand.c_str());
+        } else {
+            std::cout << "Compilation failed." << std::endl;
+        }
+    }
+    void executeCFile(const std::string& cppFilePath) {
+        std::filesystem::path cppPath(cppFilePath);
+        std::string executablePath = cppPath.stem().string(); // Get the filename stem (without extension)
+        std::string compileCommand = "gcc -o " + executablePath + " " + cppFilePath;
 
         int compileResult = std::system(compileCommand.c_str());
 
