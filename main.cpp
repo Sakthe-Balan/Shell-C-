@@ -92,7 +92,25 @@ public:
         }
     }
 }
-    
+    void makedir(std::string path){
+         try {
+        fs::create_directory(path);
+        return ;
+    } catch (const std::filesystem::filesystem_error& ex) {
+        std::cerr << "Error creating directory: " << ex.what() << std::endl;
+        return ;
+    }
+    }
+    void makedirwithpermissions(std::string path,int permissions){
+         try {
+        fs::create_directory(path);
+        fs::permissions(path, fs::perms::all | static_cast<fs::perms>(permissions));
+        return ;
+    } catch (const std::filesystem::filesystem_error& ex) {
+        std::cerr << "Error creating directory: " << ex.what() << std::endl;
+        return ;
+    }
+    }
     // All the functions for the commands are written as a else if condition in the execute function
     void execute(std::vector<std::string> input) {
         if (input.empty()) {
@@ -119,6 +137,14 @@ public:
             }
             else run(input[1]);
         } 
+        else if(input[0] == "mkdir"){
+            if (input[1] =="-m"){
+                int permissions = std::stoi(input[2]);
+                makedirwithpermissions(input[3],permissions);
+            }
+            else
+            makedir(input[1]);
+        }
         else if (input[0] == "man") {
         if (input.size() > 1) {
             for (size_t i = 1; i < input.size(); i++) {
