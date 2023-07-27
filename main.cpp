@@ -150,6 +150,9 @@ public:
             touchFile(input[1]);
             //tried updating time stamp was not possible unless we use external libraries
         }
+        else if(input[0] == "rename"){
+            renameFile(input[1],input[2]);
+        }
         else if (input[0] == "man") {
         if (input.size() > 1) {
             for (size_t i = 1; i < input.size(); i++) {
@@ -172,6 +175,22 @@ public:
     ofs << "File created by touch command that you have put\n"; 
     ofs.close();
     }
+    
+void renameFile(const std::string& source, const std::string& destination) {
+        try {
+        if (fs::exists(source)) {
+            // Use fs::rename() to rename the file
+            fs::rename(source, destination);
+            return ;
+        } else {
+            std::cout << "Source file does not exist." << std::endl;
+            return ;
+        }
+    } catch (const std::filesystem::filesystem_error& ex) {
+        std::cerr << "Error: " << ex.what() << std::endl;
+        return ;
+    }
+}
     //From here we start defining all the functions required to execute the commands.
 
     void listDirectory(const std::string& directory, bool showHidden) {
