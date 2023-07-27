@@ -114,7 +114,7 @@ void rm(const std::vector<std::string>& input) {
         std::string file_path;
         for (size_t i = 1; i < input.size(); i++) { // to check -f flag
             std::string word = input[i];
-            if (word == "-f") {
+            if (word == "-r") {
                 forceRemove = true;
             } else {
                 file_path = word;
@@ -122,7 +122,7 @@ void rm(const std::vector<std::string>& input) {
         }
 
         if (file_path.empty()) {
-            std::cout << "Usage: rm [-f] <file_path>\n";
+            std::cout << "Usage: rm [-r] <file_path>\n";
             return;
         }
 
