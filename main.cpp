@@ -244,8 +244,8 @@ void cd(const std::string& directory) {
         if (input.size() > 1) {
             cd(input[1]);
         } else {
-            // If the user types 'cd' without arguments, go to the home directory
-            cd("");
+
+            cd(""); //home directory
         }
     }
         else if(input[0] == "touch"){
