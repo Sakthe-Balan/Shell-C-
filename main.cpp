@@ -6,7 +6,7 @@
 #include <chrono>
 #include <cstdlib>
 
-namespace fs = std::filesystem; //aliasing
+namespace filesys = std::filesystem; //aliasing
 class utils {
 public:
 // This function just takes the initial input and passes it to the execute function
@@ -22,8 +22,8 @@ public:
         std::cout << "  ls   : List files and directories in the current directory.\n";
         std::cout << "  pwd : Print Working Directory.\n";
         std::cout << "  cd : Change Current Working Directory.\n";
-      std::cout << "  rm : Remove file or directories.\n";
-      std::cout << "  cp : Copy files or directories from one location to another.\n";
+        std::cout << "  rm : Remove file or directories.\n";
+        std::cout << "  cp : Copy files or directories from one location to another.\n";
      
       
     }
@@ -83,9 +83,9 @@ public:
 
     if (flags == "" || flags==" ") {
         std::cout << "Command Manual:\n";
-        for (const std::string& command : commands) {
+        for (const std::string& command : commands) 
             std::cout << command << std::endl;
-        }
+        
     } else {
         bool found = false;
         for (const std::string& command : commands) {
@@ -95,29 +95,27 @@ public:
                 break;
             }
         }
-        if (!found) {
+        if (!found) 
             std::cout << "Command not found in the manual." << std::endl;
-        }
+        
     }
 }
     void makedir(std::string path){
-         try {
-        fs::create_directory(path);
+        if(filesys::create_directory(path))
         return ;
-    } catch (const std::filesystem::filesystem_error& ex) {
-        std::cerr << "Error creating directory: " << ex.what() << std::endl;
-        return ;
-    }
+        else
+        std::cout << "couldnt create directory " << path << std::endl;
+     
     }
 void rm(const std::vector<std::string>& input) {
-        bool forceRemove = false;
+        bool forceRemoveflag = false;
         std::string file_path;
         for (size_t i = 1; i < input.size(); i++) { // to check -f flag
-            std::string word = input[i];
-            if (word == "-f") {
-                forceRemove = true;
+            std::string flags_of_command = input[i];
+            if (flags_of_command == "-f") {
+                forceRemoveflag = true;
             } else {
-                file_path = word;
+                file_path = flags_of_command;
             }
         }
 
@@ -127,10 +125,10 @@ void rm(const std::vector<std::string>& input) {
         }
 
         try {
-            if (forceRemove) {
-                fs::remove_all(file_path); //all directories
+            if (forceRemoveflag == true) {
+                filesys::remove_all(file_path); //all directories
             } else {
-                fs::remove(file_path);  //remove files
+                filesys::remove(file_path);  //remove files
             }
             std::cout << "File removed successfully.\n";
         } catch (const std::filesystem::filesystem_error& ex) {
@@ -139,10 +137,10 @@ void rm(const std::vector<std::string>& input) {
     }
 void cd(const std::string& directory) {
     try {
-        if(directory.empty()){
+        if(directory.empty()==true){
             char* home_directory = std::getenv("HOME");
             if (home_directory != nullptr) {
-                fs::current_path(home_directory);
+                filesys::current_path(home_directory);
                 std::cout << "Current working directory changed to: " << home_directory << std::endl;
             } else {
                 std::cerr << "Error: HOME environment variable not set." << std::endl;
@@ -151,12 +149,10 @@ void cd(const std::string& directory) {
         }
         else
         {
-        // to get the current working directory 
-        fs::path current_path = fs::current_path();
-        // adds the direc to the current path
-        fs::path new_path = current_path / directory;
-        // sets new path
-        fs::current_path(new_path);
+        filesys::path current_path = filesys::current_path();
+        filesys::path new_path = current_path / directory;
+
+        filesys::current_path(new_path);
         std::cout << "Current working directory changed to: " << new_path << std::endl;
         } 
         }
@@ -166,8 +162,8 @@ void cd(const std::string& directory) {
 }
     void makedirwithpermissions(std::string path,int permissions){
          try {
-        fs::create_directory(path);
-        fs::permissions(path, fs::perms::all | static_cast<fs::perms>(permissions));
+        filesys::create_directory(path);
+        filesys::permissions(path, filesys::perms::all | static_cast<filesys::perms>(permissions));
         return ;
     } catch (const std::filesystem::filesystem_error& ex) {
         std::cerr << "Error creating directory: " << ex.what() << std::endl;
@@ -296,9 +292,9 @@ void clearfunc(){
     void touchFile(const std::string& filename) {
     auto current_time = std::chrono::system_clock::now();
   
-    fs::path path{ "." };
+    filesys::path path{ "." };
     path /= filename; 
-    fs::create_directories(path.parent_path()); 
+    filesys::create_directories(path.parent_path()); 
     std::ofstream ofs(path);
     ofs << "File created by touch command that you have put\n"; 
     ofs.close();
@@ -306,9 +302,9 @@ void clearfunc(){
     
 void renameFile(const std::string& source, const std::string& destination) {
         try {
-        if (fs::exists(source)) {
-            // Use fs::rename() to rename the file
-            fs::rename(source, destination);
+        if (filesys::exists(source)) {
+            // Use filesys::rename() to rename the file
+            filesys::rename(source, destination);
             return ;
         } else {
             std::cout << "Source file does not exist." << std::endl;
@@ -322,7 +318,7 @@ void renameFile(const std::string& source, const std::string& destination) {
     //From here we start defining all the functions required to execute the commands.
 
     void listDirectory(const std::string& directory, bool showHidden) {
-        for (const auto& entry : fs::directory_iterator(directory)) {
+        for (const auto& entry : filesys::directory_iterator(directory)) {
             std::string filename = entry.path().filename().string();
             if (!showHidden && filename[0] == '.') { //when show hidden(a flag) is true the continue is not executed hence all files are given
                 continue;
@@ -369,7 +365,7 @@ void renameFile(const std::string& source, const std::string& destination) {
     }
 }
   void exec(const std::string& path) {
-        if (fs::exists(path)) {
+        if (filesys::exists(path)) {
             std::string fileExtension = path.substr(path.find_last_of(".") + 1);
             if (fileExtension == "cpp") {
                 executeCppFile(path);
