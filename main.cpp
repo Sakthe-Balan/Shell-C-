@@ -114,7 +114,7 @@ public:
     }
     }
     //copy and delete contents from source to destination file and delete the file as well
-    void copyfunc(const std::string& source, const std::string& destination) {
+    void copyfunction(const std::string& source, const std::string& destination) {
   
         std::ifstream sourceFile(source, std::ios::binary);
         std::ofstream destinationFile(destination, std::ios::binary);
@@ -182,6 +182,9 @@ public:
         }
         else if(input[0] == "rename"){
             renameFile(input[1],input[2]);
+        }
+        else if(input[0] == "cp"){
+            copyfunction(input[1],input[2]);
         }
 
         else if (input[0] == "man") {
