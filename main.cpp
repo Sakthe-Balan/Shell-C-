@@ -20,6 +20,11 @@ public:
         std::cout << "  exit : Exit the shell.\n";
         std::cout << "  ls   : List files and directories in the current directory.\n";
         std::cout << "  pwd : Print Working Directory.\n";
+        std::cout << "  cd : Change Current Working Directory.\n";
+      std::cout << "  rm : Remove file or directories.\n";
+      std::cout << "  cp : Copy files or directories from one location to another.\n";
+     
+      
     }
     void show_all_commands(){
         std::string commands[21] = {
@@ -103,6 +108,34 @@ public:
         return ;
     }
     }
+void removeFile(const std::vector<std::string>& input) {
+        bool forceRemove = false;
+        std::string file_path;
+        for (size_t i = 1; i < input.size(); i++) { // to check -f flag
+            std::string word = input[i];
+            if (word == "-f") {
+                forceRemove = true;
+            } else {
+                file_path = word;
+            }
+        }
+
+        if (file_path.empty()) {
+            std::cout << "Usage: rm [-f] <file_path>\n";
+            return;
+        }
+
+        try {
+            if (forceRemove) {
+                fs::remove_all(file_path); //all directories
+            } else {
+                fs::remove(file_path);  //remove files
+            }
+            std::cout << "File removed successfully.\n";
+        } catch (const std::filesystem::filesystem_error& ex) {
+            std::cerr << "Error removing file/directory: " << ex.what() << std::endl;
+        }
+    }
     void makedirwithpermissions(std::string path,int permissions){
          try {
         fs::create_directory(path);
@@ -154,7 +187,10 @@ public:
        
             std::cout << "Present working directory: " << current_directory << std::endl;
     }        }
-
+          
+      else if (input[0] == "rm") {
+            removeFile(input);
+        }
         else if(input[0] == "touch"){
             touchFile(input[1]);
             //tried updating time stamp was not possible unless we use external libraries
@@ -171,6 +207,8 @@ public:
          else {
             show_all_commands();
         }}
+          
+          
      else {
         std::cout << "Unknown command: " << input[0] << std::endl;
     }
@@ -250,6 +288,7 @@ void renameFile(const std::string& source, const std::string& destination) {
         return "";
     }
 }
+
 };
 
 int main() {
