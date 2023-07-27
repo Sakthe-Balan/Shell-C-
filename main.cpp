@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <fstream>
 
 namespace fs = std::filesystem; //aliasing
 class utils {
@@ -39,7 +40,14 @@ public:
             }
 
             listDirectory(".", showHidden);
-        } else {
+        }else if (input[0] == "run") {
+            if (input.size() < 2) {
+                std::cout << "Usage: execute <path_to_sh_file>\n";
+                return;
+            }
+            else run(input[1]);
+        } 
+        else {
             std::cout << "Unknown command: " << input[0] << std::endl;
         }
     }
@@ -73,6 +81,15 @@ public:
         }
         return words;
     }
+    //define the run fucntion  which takes the path of a .sh file and executes all the lines
+   void run(std::string p) {
+        std::string path = p;
+        std::ifstream file(path); //This opens and reads the file
+        std::string lin;
+        while (std::getline(file, lin)) {
+            executeCommand(lin);
+        }
+    } 
 };
 
 int main() {
