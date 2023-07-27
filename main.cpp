@@ -19,6 +19,7 @@ public:
         std::cout << "  help : Display available commands.\n";
         std::cout << "  exit : Exit the shell.\n";
         std::cout << "  ls   : List files and directories in the current directory.\n";
+        std::cout << "  pwd : Print Working Directory.\n";
     }
     void show_all_commands(){
         std::string commands[21] = {
@@ -146,6 +147,14 @@ public:
             else
             makedir(input[1]);
         }
+
+        else if(input[0] == "pwd"){
+            std::string current_directory = pwd();
+            if (!current_directory.empty()) {
+       
+            std::cout << "Present working directory: " << current_directory << std::endl;
+    }        }
+
         else if(input[0] == "touch"){
             touchFile(input[1]);
             //tried updating time stamp was not possible unless we use external libraries
@@ -153,6 +162,7 @@ public:
         else if(input[0] == "rename"){
             renameFile(input[1],input[2]);
         }
+
         else if (input[0] == "man") {
         if (input.size() > 1) {
             for (size_t i = 1; i < input.size(); i++) {
@@ -230,6 +240,16 @@ void renameFile(const std::string& source, const std::string& destination) {
             executeCommand(lin);
         }
     } 
+    std::string pwd() {
+    try {    
+        //Use std::filesystem::current_path() to get the current working directory 
+        std::filesystem::path current_path = std::filesystem::current_path();
+        return current_path.string();
+    } catch (const std::exception& e) {
+        std::cerr << "Error getting the current directory: " << e.what() << std::endl;
+        return "";
+    }
+}
 };
 
 int main() {
