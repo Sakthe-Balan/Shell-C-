@@ -1,6 +1,6 @@
 # My C++ Shell Terminal
 
-![Shell Terminal Logo](/image/shell.png)
+![Shell Terminal Logo](/images/shell.png)
 
 Welcome to My C++ Shell Terminal! This terminal is a command-line interface built using C++ that allows you to interact with your operating system.
 
