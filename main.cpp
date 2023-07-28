@@ -119,7 +119,7 @@ void rm(const std::vector<std::string>& input) {
         std::string file_path;
         for (size_t i = 1; i < input.size(); i++) { // to check -f flag
             std::string flags_of_command = input[i];
-            if (flags_of_command == "-f") {
+            if (flags_of_command == "-r") {
                 forceRemoveflag = true;
             } else {
                 file_path = flags_of_command;
@@ -127,7 +127,7 @@ void rm(const std::vector<std::string>& input) {
         }
 
         if (file_path.empty()) {
-            std::cout << "Usage: rm [-f] <file_path>\n";
+            std::cout << "Usage: rm [-r] <file_path>\n";
             return;
         }
 
@@ -148,7 +148,7 @@ void cd(const std::string& directory) {
             char* home_directory = std::getenv("HOME");
             if (home_directory != nullptr) {
                 filesys::current_path(home_directory);
-                std::cout << "Current working directory changed to: " << home_directory << std::endl;
+                // std::cout << "Current working directory changed to: " << home_directory << std::endl;
             } else {
                 std::cerr << "Error: HOME environment variable not set." << std::endl;
             }
@@ -160,7 +160,7 @@ void cd(const std::string& directory) {
         filesys::path new_path = current_path / directory;
 
         filesys::current_path(new_path);
-        std::cout << "Current working directory changed to: " << new_path << std::endl;
+        // std::cout << "Current working directory changed to: " << new_path << std::endl;
         } 
         }
     catch (const std::exception& e) {
