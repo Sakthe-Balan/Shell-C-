@@ -24,7 +24,24 @@ public:
         std::cout << "  cd : Change Current Working Directory.\n";
         std::cout << "  rm : Remove file or directories.\n";
         std::cout << "  cp : Copy files or directories from one location to another.\n";
-    }
+        std::cout << "  help  : Display available commands.\n";
+        std::cout << "  exit  : Exit the shell.\n";
+        std::cout << "  ls    : List files and directories in the current directory.\n";
+        std::cout << "  pwd   : Print Working Directory.\n";
+        std::cout << "  cd    : Change Current Working Directory.\n";
+        std::cout << "  rm    : Remove file or directories.\n";
+        std::cout << "  cp    : Copy files or directories from one location to another.\n";
+        std::cout << "  mkdir : Create a new directory.\n";
+        std::cout << "  touch : Create an empty file or update the access/modified timestamps of an existing file.\n";
+        std::cout << "  man   : Display the manual pages (documentation) for a specific command.\n";
+        std::cout << "  mv    : Move or rename files or directories.\n";
+        std::cout << "  clear : Clear the terminal screen.\n";
+        std::cout << "  nano  : Open a text editor (notepad) for the specified file.\n";
+        std::cout << "  rename: Rename a file or directory.\n";
+        std::cout << "  exec  : Execute a script or program file.\n";
+        std::cout << "  run   : Run a shell script.\n";
+}
+
     void show_all_commands(){
         std::string commands[21] = {
         "ls: List files and directories in the current working directory.",
@@ -105,41 +122,41 @@ public:
         std::cout << "couldnt create directory " << path << std::endl;
      
     }
-void rm(const std::vector<std::string>& input) {
-        bool forceRemoveflag = false;
-        std::string file_path;
-        for (size_t i = 1; i < input.size(); i++) { // to check -f flag
-            std::string flags_of_command = input[i];
-            if (flags_of_command == "-f") {
-                forceRemoveflag = true;
+void rm(const std::vector<std::string>& ip) {
+        bool fr = false; 
+        std::string fpath;
+        for (size_t i = 1; i < ip.size(); i++) { // to check -f flag
+            std::string flag = ip[i];
+            if (flag == "-r") {
+                fr = true;
             } else {
-                file_path = flags_of_command;
+                fpath = flag;
             }
         }
 
-        if (file_path.empty()) {
-            std::cout << "Usage: rm [-f] <file_path>\n";
+        if (fpath.empty()) {
+            std::cout << "Usage: rm [-r] <file_path>\n";
             return;
         }
 
         try {
-            if (forceRemoveflag == true) {
-                filesys::remove_all(file_path); //all directories
+            if (fr == true) {
+                filesys::remove_all(fpath); //all directories
             } else {
-                filesys::remove(file_path);  //remove files
+                filesys::remove(fpath);  //remove files
             }
             std::cout << "File removed successfully.\n";
         } catch (const std::filesystem::filesystem_error& ex) {
             std::cerr << "Error removing file/directory: " << ex.what() << std::endl;
         }
     }
-void cd(const std::string& directory) {
+void cd(const std::string& dir) {
     try {
-        if(directory.empty()==true){
-            char* home_directory = std::getenv("HOME");
-            if (home_directory != nullptr) {
-                filesys::current_path(home_directory);
-                std::cout << "Current working directory changed to: " << home_directory << std::endl;
+        if(dir.empty()==true){
+            char* home_dir = std::getenv("HOME");
+            if (home_dir != nullptr) {
+                filesys::current_path(home_dir);
+                // std::cout << "Current working directory changed to: " << home_directory << std::endl;
             } else {
                 std::cerr << "Error: HOME environment variable not set." << std::endl;
             }
@@ -147,11 +164,11 @@ void cd(const std::string& directory) {
         }
         else
         {
-        filesys::path current_path = filesys::current_path();
-        filesys::path new_path = current_path / directory;
+        filesys::path cur_path = filesys::current_path();
+        filesys::path new_path = cur_path / dir;
 
         filesys::current_path(new_path);
-        std::cout << "Current working directory changed to: " << new_path << std::endl;
+        // std::cout << "Current working directory changed to: " << new_path << std::endl;
         } 
         }
     catch (const std::exception& e) {
@@ -232,10 +249,10 @@ void clearfunc(){
         }
 
         else if(input[0] == "pwd"){
-            std::string current_directory = pwd();
-            if (!current_directory.empty()) {
+            std::string cur_dir = pwd();
+            if (!cur_dir.empty()) {
        
-            std::cout << "Present working directory: " << current_directory << std::endl;
+            std::cout << "Present working directory: " << cur_dir << std::endl;
     }        }
           
       else if (input[0] == "rm") {
@@ -345,7 +362,7 @@ void renameFile(const std::string& source, const std::string& destination) {
     //define the run fucntion  which takes the path of a .sh file and executes all the lines
    void run(std::string p) {
         std::string path = p;
-        std::ifstream file(path); //This opens and reads the file
+        std::ifstream file(path); 
         std::string lin;
         while (std::getline(file, lin)) {
             executeCommand(lin);
@@ -353,9 +370,9 @@ void renameFile(const std::string& source, const std::string& destination) {
     } 
     std::string pwd() {
     try {    
-        //Use std::filesystem::current_path() to get the current working directory 
-        std::filesystem::path current_path = std::filesystem::current_path();
-        return current_path.string();
+        //to get the current working directory 
+        std::filesystem::path cur_path = std::filesystem::current_path();
+        return cur_path.string();
     } catch (const std::exception& e) {
         std::cerr << "Error getting the current directory: " << e.what() << std::endl;
         return "";
@@ -363,44 +380,44 @@ void renameFile(const std::string& source, const std::string& destination) {
 }
   void exec(const std::string& path) {
         if (filesys::exists(path)) {
-            std::string fileExtension = path.substr(path.find_last_of(".") + 1);
-            if (fileExtension == "cpp") {
-                executeCppFile(path);
-            } else if (fileExtension == "py") {
+            std::string ext = path.substr(path.find_last_of(".") + 1);
+            if (ext == "cpp") {
+                cpp(path);
+            } else if (ext == "py") {
                 executePythonFile(path);}
-            else if (fileExtension == "c") {
+            else if (ext == "c") {
                 executeCFile(path);
             } else {
-                std::cout << "Unsupported file type. Cannot execute." << std::endl;
+                std::cout << "Cannot execute." << std::endl;
             }
         } else {
             std::cout << "File not found: " << path << std::endl;
         }
     }
-void executeCppFile(const std::string& cppFilePath) {
-        std::filesystem::path cppPath(cppFilePath);
-        std::string executablePath = cppPath.stem().string(); // Get the filename stem (without extension)
-        std::string compileCommand = "g++ -o " + executablePath + " " + cppFilePath;
+void cpp(const std::string& pa) {
+        std::filesystem::path dir(pa);
+        std::string exep = dir.stem().string(); 
+        std::string comp = "g++ -o " + exep + " " + pa;
 
-        int compileResult = std::system(compileCommand.c_str());
+        int res = std::system(comp.c_str());
 
-        if (compileResult == 0) {
-            std::string runCommand =  executablePath;
-            std::system(runCommand.c_str());
+        if (res == 0) {
+            std::string run =  exep;
+            std::system(run.c_str());
         } else {
             std::cout << "Compilation failed." << std::endl;
         }
     }
-    void executeCFile(const std::string& cppFilePath) {
-    std::filesystem::path cppPath(cppFilePath);
-    std::string executablePath = cppPath.stem().string(); // Get the filename stem (without extension)
-    std::string compileCommand = "gcc -o " + executablePath + " " + cppFilePath;
+    void executeCFile(const std::string& pa) {
+    std::filesystem::path dir(pa);
+    std::string exep = dir.stem().string(); 
+    std::string comp = "gcc -o " + exep + " " + pa;
 
-    int compileResult = std::system(compileCommand.c_str());
+    int res = std::system(comp.c_str());
 
-    if (compileResult == 0) {
-        std::string runCommand = executablePath; // Removed the './' prefix
-        std::system(runCommand.c_str());
+    if (res == 0) {
+        std::string run = exep; 
+        std::system(run.c_str());
     } else {
         std::cout << "Compilation failed." << std::endl;
     }
