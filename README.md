@@ -1,6 +1,6 @@
 # My C++ Shell Terminal
 
-![Shell Terminal Logo](path/to/your-logo.png)
+![Shell Terminal Logo](/image/shell.png)
 
 Welcome to My C++ Shell Terminal! This terminal is a command-line interface built using C++ that allows you to interact with your operating system.
 
@@ -18,6 +18,6 @@ Welcome to My C++ Shell Terminal! This terminal is a command-line interface buil
 Clone the repository and compile the source code:
 
 ```bash
-git clone https://github.com/yourusername/your-terminal.git
+git clone https://github.com/Sakthe-Balan/Shell-C-.git
 cd your-terminal
 g++ -o terminal main.cpp
