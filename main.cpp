@@ -6,7 +6,7 @@
 #include <chrono>
 #include <cstdlib>
 
-namespace filesys = std::filesystem; //aliasing
+namespace filesys = std::filesystem; 
 class utils {
 public:
 // This function just takes the initial input and passes it to the execute function
@@ -24,8 +24,6 @@ public:
         std::cout << "  cd : Change Current Working Directory.\n";
         std::cout << "  rm : Remove file or directories.\n";
         std::cout << "  cp : Copy files or directories from one location to another.\n";
-     
-      
     }
     void show_all_commands(){
         std::string commands[21] = {
@@ -87,15 +85,15 @@ public:
             std::cout << command << std::endl;
         
     } else {
-        bool found = false;
+        bool foundcmd = false;
         for (const std::string& command : commands) {
             if (command.find(flags + ":") == 0) {
                 std::cout << "Command Manual for " << flags << ":\n" << command << std::endl;
-                found = true;
+                foundcmd = true;
                 break;
             }
         }
-        if (!found) 
+        if (!foundcmd) 
             std::cout << "Command not found in the manual." << std::endl;
         
     }
@@ -180,7 +178,6 @@ void clearfunc(){
     }
     //copy and delete contents from source to destination file and delete the file as well
     void copyfunction(const std::string& source, const std::string& destination) {
-  
         std::ifstream sourceFile(source, std::ios::binary);
         std::ofstream destinationFile(destination, std::ios::binary);
 
@@ -303,7 +300,7 @@ void clearfunc(){
 void renameFile(const std::string& source, const std::string& destination) {
         try {
         if (filesys::exists(source)) {
-            // Use filesys::rename() to rename the file
+            // Using  filesys::rename() methpod to to rename the file
             filesys::rename(source, destination);
             return ;
         } else {
@@ -417,10 +414,6 @@ void executeCppFile(const std::string& cppFilePath) {
             std::cout << "Execution failed." << std::endl;
         }
     }
-
-
-
-
 };
 
 int main() {
