@@ -114,40 +114,40 @@ public:
         std::cout << "couldnt create directory " << path << std::endl;
      
     }
-void rm(const std::vector<std::string>& input) {
-        bool forceRemoveflag = false;
-        std::string file_path;
-        for (size_t i = 1; i < input.size(); i++) { // to check -f flag
-            std::string flags_of_command = input[i];
-            if (flags_of_command == "-r") {
-                forceRemoveflag = true;
+void rm(const std::vector<std::string>& ip) {
+        bool fr = false; 
+        std::string fpath;
+        for (size_t i = 1; i < ip.size(); i++) { // to check -f flag
+            std::string flag = ip[i];
+            if (flag == "-r") {
+                fr = true;
             } else {
-                file_path = flags_of_command;
+                fpath = flag;
             }
         }
 
-        if (file_path.empty()) {
+        if (fpath.empty()) {
             std::cout << "Usage: rm [-r] <file_path>\n";
             return;
         }
 
         try {
-            if (forceRemoveflag == true) {
-                filesys::remove_all(file_path); //all directories
+            if (fr == true) {
+                filesys::remove_all(fpath); //all directories
             } else {
-                filesys::remove(file_path);  //remove files
+                filesys::remove(fpath);  //remove files
             }
             std::cout << "File removed successfully.\n";
         } catch (const std::filesystem::filesystem_error& ex) {
             std::cerr << "Error removing file/directory: " << ex.what() << std::endl;
         }
     }
-void cd(const std::string& directory) {
+void cd(const std::string& dir) {
     try {
-        if(directory.empty()==true){
-            char* home_directory = std::getenv("HOME");
-            if (home_directory != nullptr) {
-                filesys::current_path(home_directory);
+        if(dir.empty()==true){
+            char* home_dir = std::getenv("HOME");
+            if (home_dir != nullptr) {
+                filesys::current_path(home_dir);
                 // std::cout << "Current working directory changed to: " << home_directory << std::endl;
             } else {
                 std::cerr << "Error: HOME environment variable not set." << std::endl;
@@ -156,8 +156,8 @@ void cd(const std::string& directory) {
         }
         else
         {
-        filesys::path current_path = filesys::current_path();
-        filesys::path new_path = current_path / directory;
+        filesys::path cur_path = filesys::current_path();
+        filesys::path new_path = cur_path / dir;
 
         filesys::current_path(new_path);
         // std::cout << "Current working directory changed to: " << new_path << std::endl;
@@ -242,10 +242,10 @@ void clearfunc(){
         }
 
         else if(input[0] == "pwd"){
-            std::string current_directory = pwd();
-            if (!current_directory.empty()) {
+            std::string cur_dir = pwd();
+            if (!cur_dir.empty()) {
        
-            std::cout << "Present working directory: " << current_directory << std::endl;
+            std::cout << "Present working directory: " << cur_dir << std::endl;
     }        }
           
       else if (input[0] == "rm") {
@@ -363,9 +363,9 @@ void renameFile(const std::string& source, const std::string& destination) {
     } 
     std::string pwd() {
     try {    
-        //Use std::filesystem::current_path() to get the current working directory 
-        std::filesystem::path current_path = std::filesystem::current_path();
-        return current_path.string();
+        //to get the current working directory 
+        std::filesystem::path cur_path = std::filesystem::current_path();
+        return cur_path.string();
     } catch (const std::exception& e) {
         std::cerr << "Error getting the current directory: " << e.what() << std::endl;
         return "";
