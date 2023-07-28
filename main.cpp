@@ -6,7 +6,7 @@
 #include <chrono>
 #include <cstdlib>
 
-namespace filesys = std::filesystem; //aliasing
+namespace filesys = std::filesystem; 
 class utils {
 public:
 // This function just takes the initial input and passes it to the execute function
@@ -17,6 +17,13 @@ public:
     //Add all the commands to the help function. acts as an initial mannual
     void help() {
         std::cout << "Available commands:\n";
+        std::cout << "  help : Display available commands.\n";
+        std::cout << "  exit : Exit the shell.\n";
+        std::cout << "  ls   : List files and directories in the current directory.\n";
+        std::cout << "  pwd : Print Working Directory.\n";
+        std::cout << "  cd : Change Current Working Directory.\n";
+        std::cout << "  rm : Remove file or directories.\n";
+        std::cout << "  cp : Copy files or directories from one location to another.\n";
         std::cout << "  help  : Display available commands.\n";
         std::cout << "  exit  : Exit the shell.\n";
         std::cout << "  ls    : List files and directories in the current directory.\n";
@@ -34,6 +41,7 @@ public:
         std::cout << "  exec  : Execute a script or program file.\n";
         std::cout << "  run   : Run a shell script.\n";
 }
+
     void show_all_commands(){
         std::string commands[21] = {
         "ls: List files and directories in the current working directory.",
@@ -94,15 +102,15 @@ public:
             std::cout << command << std::endl;
         
     } else {
-        bool found = false;
+        bool foundcmd = false;
         for (const std::string& command : commands) {
             if (command.find(flags + ":") == 0) {
                 std::cout << "Command Manual for " << flags << ":\n" << command << std::endl;
-                found = true;
+                foundcmd = true;
                 break;
             }
         }
-        if (!found) 
+        if (!foundcmd) 
             std::cout << "Command not found in the manual." << std::endl;
         
     }
@@ -187,7 +195,6 @@ void clearfunc(){
     }
     //copy and delete contents from source to destination file and delete the file as well
     void copyfunction(const std::string& source, const std::string& destination) {
-  
         std::ifstream sourceFile(source, std::ios::binary);
         std::ofstream destinationFile(destination, std::ios::binary);
 
@@ -310,7 +317,7 @@ void clearfunc(){
 void renameFile(const std::string& source, const std::string& destination) {
         try {
         if (filesys::exists(source)) {
-            // Use filesys::rename() to rename the file
+            // Using  filesys::rename() methpod to to rename the file
             filesys::rename(source, destination);
             return ;
         } else {
@@ -424,10 +431,6 @@ void cpp(const std::string& pa) {
             std::cout << "Execution failed." << std::endl;
         }
     }
-
-
-
-
 };
 
 int main() {
