@@ -17,16 +17,23 @@ public:
     //Add all the commands to the help function. acts as an initial mannual
     void help() {
         std::cout << "Available commands:\n";
-        std::cout << "  help : Display available commands.\n";
-        std::cout << "  exit : Exit the shell.\n";
-        std::cout << "  ls   : List files and directories in the current directory.\n";
-        std::cout << "  pwd : Print Working Directory.\n";
-        std::cout << "  cd : Change Current Working Directory.\n";
-        std::cout << "  rm : Remove file or directories.\n";
-        std::cout << "  cp : Copy files or directories from one location to another.\n";
-     
-      
-    }
+        std::cout << "  help  : Display available commands.\n";
+        std::cout << "  exit  : Exit the shell.\n";
+        std::cout << "  ls    : List files and directories in the current directory.\n";
+        std::cout << "  pwd   : Print Working Directory.\n";
+        std::cout << "  cd    : Change Current Working Directory.\n";
+        std::cout << "  rm    : Remove file or directories.\n";
+        std::cout << "  cp    : Copy files or directories from one location to another.\n";
+        std::cout << "  mkdir : Create a new directory.\n";
+        std::cout << "  touch : Create an empty file or update the access/modified timestamps of an existing file.\n";
+        std::cout << "  man   : Display the manual pages (documentation) for a specific command.\n";
+        std::cout << "  mv    : Move or rename files or directories.\n";
+        std::cout << "  clear : Clear the terminal screen.\n";
+        std::cout << "  nano  : Open a text editor (notepad) for the specified file.\n";
+        std::cout << "  rename: Rename a file or directory.\n";
+        std::cout << "  exec  : Execute a script or program file.\n";
+        std::cout << "  run   : Run a shell script.\n";
+}
     void show_all_commands(){
         std::string commands[21] = {
         "ls: List files and directories in the current working directory.",
