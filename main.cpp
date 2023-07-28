@@ -134,10 +134,12 @@ void rm(const std::vector<std::string>& ip) {
         try {
             if (fr == true) {
                 filesys::remove_all(fpath); //all directories
+                std::cout << "File removed successfully.\n";
             } else {
                 filesys::remove(fpath);  //remove files
+                std::cout << "File removed successfully.\n";
             }
-            std::cout << "File removed successfully.\n";
+            
         } catch (const std::filesystem::filesystem_error& ex) {
             std::cerr << "Error removing file/directory: " << ex.what() << std::endl;
         }
