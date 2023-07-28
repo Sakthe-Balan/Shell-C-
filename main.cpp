@@ -355,7 +355,7 @@ void renameFile(const std::string& source, const std::string& destination) {
     //define the run fucntion  which takes the path of a .sh file and executes all the lines
    void run(std::string p) {
         std::string path = p;
-        std::ifstream file(path); //This opens and reads the file
+        std::ifstream file(path); 
         std::string lin;
         while (std::getline(file, lin)) {
             executeCommand(lin);
@@ -373,44 +373,44 @@ void renameFile(const std::string& source, const std::string& destination) {
 }
   void exec(const std::string& path) {
         if (filesys::exists(path)) {
-            std::string fileExtension = path.substr(path.find_last_of(".") + 1);
-            if (fileExtension == "cpp") {
-                executeCppFile(path);
-            } else if (fileExtension == "py") {
+            std::string ext = path.substr(path.find_last_of(".") + 1);
+            if (ext == "cpp") {
+                cpp(path);
+            } else if (ext == "py") {
                 executePythonFile(path);}
-            else if (fileExtension == "c") {
+            else if (ext == "c") {
                 executeCFile(path);
             } else {
-                std::cout << "Unsupported file type. Cannot execute." << std::endl;
+                std::cout << "Cannot execute." << std::endl;
             }
         } else {
             std::cout << "File not found: " << path << std::endl;
         }
     }
-void executeCppFile(const std::string& cppFilePath) {
-        std::filesystem::path cppPath(cppFilePath);
-        std::string executablePath = cppPath.stem().string(); // Get the filename stem (without extension)
-        std::string compileCommand = "g++ -o " + executablePath + " " + cppFilePath;
+void cpp(const std::string& pa) {
+        std::filesystem::path dir(pa);
+        std::string exep = dir.stem().string(); 
+        std::string comp = "g++ -o " + exep + " " + pa;
 
-        int compileResult = std::system(compileCommand.c_str());
+        int res = std::system(comp.c_str());
 
-        if (compileResult == 0) {
-            std::string runCommand =  executablePath;
-            std::system(runCommand.c_str());
+        if (res == 0) {
+            std::string run =  exep;
+            std::system(run.c_str());
         } else {
             std::cout << "Compilation failed." << std::endl;
         }
     }
-    void executeCFile(const std::string& cppFilePath) {
-    std::filesystem::path cppPath(cppFilePath);
-    std::string executablePath = cppPath.stem().string(); // Get the filename stem (without extension)
-    std::string compileCommand = "gcc -o " + executablePath + " " + cppFilePath;
+    void executeCFile(const std::string& pa) {
+    std::filesystem::path dir(pa);
+    std::string exep = dir.stem().string(); 
+    std::string comp = "gcc -o " + exep + " " + pa;
 
-    int compileResult = std::system(compileCommand.c_str());
+    int res = std::system(comp.c_str());
 
-    if (compileResult == 0) {
-        std::string runCommand = executablePath; // Removed the './' prefix
-        std::system(runCommand.c_str());
+    if (res == 0) {
+        std::string run = exep; 
+        std::system(run.c_str());
     } else {
         std::cout << "Compilation failed." << std::endl;
     }
